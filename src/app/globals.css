@@ -1,0 +1,840 @@
+@import "tailwindcss";
+
+html {
+    color-scheme: dark;
+    background: #0a0a0a;
+}
+
+:root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+}
+
+/* ============================================
+   라이트모드 - 토스 디자인 시스템 기반
+   ============================================ */
+html.light {
+    color-scheme: light;
+    background: #F7F8FA;
+    --background: #F7F8FA;
+    --foreground: #191F28;
+}
+
+html.light body {
+    background: var(--background);
+}
+
+/* ============================================
+   배경색 계층 구조 (밝은 순서)
+   - Level 0 (페이지): #F7F8FA
+   - Level 1 (카드): #FFFFFF
+   - Level 2 (입력/버튼): #F2F4F6
+   - Level 3 (호버): #E5E8EB
+   ============================================ */
+html.light .bg-black {
+    background-color: #F7F8FA !important;
+}
+
+html.light .bg-neutral-950 {
+    background-color: #FFFFFF !important;
+}
+
+html.light .bg-neutral-900 {
+    background-color: #FFFFFF !important;
+}
+
+html.light .bg-neutral-800 {
+    background-color: #F2F4F6 !important;
+}
+
+html.light .bg-neutral-700 {
+    background-color: #E5E8EB !important;
+}
+
+html.light .bg-neutral-600 {
+    background-color: #D1D6DB !important;
+}
+
+html.light .bg-zinc-900 {
+    background-color: #FFFFFF !important;
+}
+
+html.light .bg-zinc-800 {
+    background-color: #F2F4F6 !important;
+}
+
+/* ============================================
+   텍스트 색상 (WCAG AA 대비 준수)
+   - 기본: #191F28 (contrast 15:1)
+   - 보조: #4E5968 (contrast 7:1)
+   - 설명: #8B95A1 (contrast 4.5:1)
+   - 비활성: #B0B8C1 (contrast 3:1)
+   ============================================ */
+html.light .text-white {
+    color: #191F28 !important;
+}
+
+html.light .text-gray-100,
+html.light .text-neutral-100,
+html.light .text-zinc-100 {
+    color: #191F28 !important;
+}
+
+html.light .text-gray-200,
+html.light .text-neutral-200,
+html.light .text-zinc-200 {
+    color: #333D4B !important;
+}
+
+html.light .text-gray-300,
+html.light .text-neutral-300,
+html.light .text-zinc-300 {
+    color: #4E5968 !important;
+}
+
+html.light .text-gray-400,
+html.light .text-neutral-400,
+html.light .text-zinc-400 {
+    color: #6B7684 !important;
+}
+
+html.light .text-neutral-500,
+html.light .text-zinc-500 {
+    color: #8B95A1 !important;
+}
+
+html.light .text-neutral-600 {
+    color: #B0B8C1 !important;
+}
+
+/* ============================================
+   테두리 색상
+   ============================================ */
+html.light .border-neutral-700,
+html.light .border-zinc-700 {
+    border-color: #D1D6DB !important;
+}
+
+html.light .border-neutral-800,
+html.light .border-zinc-800 {
+    border-color: #E5E8EB !important;
+}
+
+html.light .border-neutral-700\/50 {
+    border-color: rgba(209, 214, 219, 0.6) !important;
+}
+
+/* ============================================
+   시맨틱 컬러 (상승/하락/강조)
+   ============================================ */
+/* 상승 - 초록 (더 진한 톤으로 가시성 향상) */
+html.light .text-emerald-400,
+html.light .text-emerald-500 {
+    color: #059669 !important;
+}
+
+html.light .text-emerald-300 {
+    color: #059669 !important;
+}
+
+html.light .text-green-400 {
+    color: #059669 !important;
+}
+
+html.light .bg-emerald-500,
+html.light .bg-emerald-600 {
+    background-color: #00A676 !important;
+}
+
+html.light .hover\:bg-emerald-500:hover {
+    background-color: #00C896 !important;
+}
+
+html.light .bg-green-700 {
+    background-color: #00A676 !important;
+}
+
+/* 하락 - 빨강 */
+html.light .text-red-400,
+html.light .text-red-500 {
+    color: #E53935 !important;
+}
+
+html.light .text-rose-500 {
+    color: #E53935 !important;
+}
+
+html.light .bg-red-600,
+html.light .bg-red-700 {
+    background-color: #E53935 !important;
+}
+
+html.light .hover\:bg-red-500:hover {
+    background-color: #EF5350 !important;
+}
+
+html.light .bg-red-500\/10 {
+    background-color: rgba(229, 57, 53, 0.08) !important;
+}
+
+html.light .hover\:bg-red-500\/20:hover {
+    background-color: rgba(229, 57, 53, 0.12) !important;
+}
+
+/* 강조 - 앰버/골드 */
+html.light .text-amber-300,
+html.light .text-amber-400 {
+    color: #D97706 !important;
+}
+
+html.light .bg-amber-500\/20 {
+    background-color: rgba(217, 119, 6, 0.12) !important;
+}
+
+/* 오렌지 - 청산가 */
+html.light .text-orange-400 {
+    color: #EA580C !important;
+}
+
+/* 바이올렛 - Isolated 모드 */
+html.light .text-violet-400 {
+    color: #7C3AED !important;
+}
+
+/* 정보 - 블루 */
+html.light .text-blue-400 {
+    color: #2563EB !important;
+}
+
+html.light .text-teal-400 {
+    color: #0D9488 !important;
+}
+
+/* 채팅 내 아이디 색상 */
+html.light .text-yellow-300 {
+    color: #B45309 !important;
+}
+
+/* ============================================
+   투명 배경 (카드 오버레이)
+   ============================================ */
+html.light .bg-neutral-900\/50 {
+    background-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+html.light .bg-neutral-900\/70 {
+    background-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+html.light .bg-neutral-900\/80 {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+html.light .bg-neutral-900\/90 {
+    background-color: rgba(255, 255, 255, 0.97) !important;
+}
+
+html.light .bg-neutral-800\/30 {
+    background-color: #F7F8FA !important;
+}
+
+html.light .bg-neutral-800\/50 {
+    background-color: #F2F4F6 !important;
+}
+
+html.light .bg-neutral-800\/60 {
+    background-color: #E5E8EB !important;
+}
+
+html.light .bg-neutral-800\/95 {
+    background-color: rgba(242, 244, 246, 0.97) !important;
+}
+
+/* ============================================
+   인터랙션 상태
+   ============================================ */
+html.light .hover\:bg-neutral-700:hover {
+    background-color: #E5E8EB !important;
+}
+
+html.light .hover\:bg-neutral-800:hover {
+    background-color: #F2F4F6 !important;
+}
+
+html.light .hover\:bg-neutral-800\/50:hover {
+    background-color: #E5E8EB !important;
+}
+
+html.light .hover\:bg-neutral-800\/60:hover {
+    background-color: #D1D6DB !important;
+}
+
+html.light .hover\:border-neutral-700\/50:hover {
+    border-color: rgba(139, 149, 161, 0.5) !important;
+}
+
+html.light .hover\:text-emerald-300:hover {
+    color: #00A676 !important;
+}
+
+html.light .hover\:text-red-400:hover {
+    color: #E53935 !important;
+}
+
+/* ============================================
+   입력 필드 & 포커스
+   ============================================ */
+html.light .placeholder-neutral-500::placeholder {
+    color: #B0B8C1 !important;
+}
+
+html.light .focus\:border-emerald-500:focus {
+    border-color: #00A676 !important;
+}
+
+html.light .focus\:border-neutral-600:focus {
+    border-color: #8B95A1 !important;
+}
+
+html.light .focus\:ring-emerald-500\/25:focus {
+    --tw-ring-color: rgba(0, 166, 118, 0.25) !important;
+}
+
+/* ============================================
+   모달 & 오버레이
+   ============================================ */
+html.light .bg-black\/70 {
+    background-color: rgba(25, 31, 40, 0.5) !important;
+}
+
+html.light .bg-black\/50 {
+    background-color: rgba(25, 31, 40, 0.4) !important;
+}
+
+html.light .backdrop-blur-sm {
+    backdrop-filter: blur(8px) !important;
+}
+
+/* ============================================
+   특수 컴포넌트
+   ============================================ */
+/* 링 & 그림자 */
+html.light .ring-zinc-800 {
+    --tw-ring-color: #E5E8EB !important;
+}
+
+html.light .shadow-lg {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light .shadow-xl {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* SEO Footer */
+html.light .bg-zinc-900\/60 {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Hide scrollbars globally while preserving scroll behavior */
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none;
+}
+
+/* 스켈레톤 애니메이션 */
+html.light .animate-pulse {
+    animation: pulse-light 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-light {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+html.light .bg-neutral-700 {
+    background-color: #E5E8EB !important;
+}
+
+/* ============================================
+   버튼 Active 상태
+   ============================================ */
+html.light .active\:bg-emerald-700:active {
+    background-color: #008F64 !important;
+}
+
+html.light .active\:bg-red-700:active {
+    background-color: #C62828 !important;
+}
+
+html.light .active\:bg-neutral-800:active {
+    background-color: #D1D6DB !important;
+}
+
+html.light .active\:bg-neutral-900:active {
+    background-color: #E5E8EB !important;
+}
+
+/* ============================================
+   비활성화 상태
+   ============================================ */
+html.light .disabled\:bg-neutral-700:disabled {
+    background-color: #E5E8EB !important;
+}
+
+html.light .disabled\:text-neutral-500:disabled {
+    color: #B0B8C1 !important;
+}
+
+/* ============================================
+   Long/Short 게이지 바
+   ============================================ */
+html.light .bg-red-600 {
+    background-color: #E53935 !important;
+}
+
+/* ============================================
+   탭 & 네비게이션
+   ============================================ */
+html.light .bg-neutral-800\/50 {
+    background-color: #F2F4F6 !important;
+}
+
+/* ============================================
+   툴팁
+   ============================================ */
+html.light .border-neutral-700 {
+    border-color: #E5E8EB !important;
+}
+
+/* ============================================
+   채팅 메시지 카드
+   ============================================ */
+html.light .shadow-sm {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ============================================
+   코인 선택 모달
+   ============================================ */
+html.light .border-amber-500\/50 {
+    border-color: rgba(217, 119, 6, 0.4) !important;
+}
+
+html.light .focus\:border-amber-500\/50:focus {
+    border-color: rgba(217, 119, 6, 0.5) !important;
+}
+
+html.light .focus\:ring-amber-500\/25:focus {
+    --tw-ring-color: rgba(217, 119, 6, 0.2) !important;
+}
+
+/* ============================================
+   Hot Coin 배지
+   ============================================ */
+.hotcoin-badge {
+    background-color: #262626;
+    color: #FCD34D;
+}
+
+.hotcoin-badge:hover {
+    background-color: #404040;
+}
+
+html.light .hotcoin-badge {
+    background-color: #E5E8EB !important;
+    color: #191F28 !important;
+    border: 1px solid #D1D6DB !important;
+}
+
+html.light .hotcoin-badge:hover {
+    background-color: #D1D6DB !important;
+}
+
+/* 앰버 텍스트 - 라이트모드에서 더 진하게 */
+html.light .text-amber-300 {
+    color: #B45309 !important;
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+}
+
+body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* widget-column 내부 요소들 비율 조정 */
+.widget-column > * {
+    flex-shrink: 1;
+    min-height: 0;
+}
+
+/* 높이 850px ~ 1000px: gap 줄이기 */
+@media (min-height: 850px) and (max-height: 1000px) {
+    aside[aria-label="거래 정보 위젯"] {
+        gap: 12px !important;
+    }
+    section[aria-label="커뮤니티 게시판 및 채팅"] {
+        height: calc(100vh - 200px) !important;
+        min-height: auto !important;
+    }
+}
+
+/* 높이 700px ~ 849px: gap 고정, 상단부터 배치 */
+@media (min-height: 700px) and (max-height: 849px) {
+    aside[aria-label="거래 정보 위젯"] {
+        justify-content: flex-start !important;
+        gap: 20px !important;
+    }
+    section[aria-label="커뮤니티 게시판 및 채팅"] {
+        height: calc(100vh - 200px) !important;
+        min-height: auto !important;
+    }
+}
+
+/* 높이 700px 이하: 양끝 정렬 */
+@media (max-height: 699px) {
+    aside[aria-label="거래 정보 위젯"] {
+        justify-content: space-between !important;
+        gap: 0 !important;
+    }
+    section[aria-label="커뮤니티 게시판 및 채팅"] {
+        height: calc(100vh - 200px) !important;
+        min-height: auto !important;
+    }
+}
+
+/* 높이 1200px ~ 1299px: 헤더 1.5배 */
+@media (min-height: 1200px) and (max-height: 1299px) {
+    .realtime-section {
+        min-height: 210px !important;
+        height: calc((100vh - 400px) * 0.28) !important;
+        max-height: 280px !important;
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
+        align-items: stretch !important;
+        overflow: hidden !important;
+    }
+    .realtime-section > div {
+        height: 100% !important;
+        max-height: 100% !important;
+    }
+    .realtime-section > div:nth-of-type(1) > div {
+        height: 100% !important;
+    }
+    .realtime-section > div:nth-of-type(1) button {
+        height: 100% !important;
+    }
+    .realtime-section > div:nth-of-type(2) > div {
+        height: 100% !important;
+    }
+    .realtime-section > div:nth-of-type(2) > div > div {
+        height: 100% !important;
+    }
+    .realtime-section > div:nth-of-type(3) > div {
+        height: 100% !important;
+        max-height: 100% !important;
+        min-height: 0 !important;
+    }
+    section[aria-label="커뮤니티 게시판 및 채팅"] {
+        max-height: 700px !important;
+        height: 700px !important;
+    }
+}
+
+/* 높이 1300px 이상에서 헤더 확대 및 대시보드 높이 제한 */
+@media (min-height: 1300px) {
+    .realtime-section {
+        min-height: 240px !important;
+        height: calc((100vh - 400px) * 0.32) !important;
+        max-height: 320px !important;
+        padding-top: 20px !important;
+        padding-bottom: 20px !important;
+        align-items: stretch !important;
+        overflow: hidden !important;
+    }
+    /* 내부 div 컨테이너들 높이 채우기 */
+    .realtime-section > div {
+        height: 100% !important;
+        max-height: 100% !important;
+    }
+    /* 코인 박스들 컨테이너 */
+    .realtime-section > div:nth-of-type(1) > div {
+        height: 100% !important;
+    }
+    .realtime-section > div:nth-of-type(1) button {
+        height: 100% !important;
+    }
+    /* 코인 박스 폰트 확대 */
+    .realtime-section > div:nth-of-type(1) h2 {
+        font-size: 1.125rem !important;
+    }
+    .realtime-section > div:nth-of-type(1) p {
+        font-size: 1.75rem !important;
+    }
+    .realtime-section > div:nth-of-type(1) .text-xs {
+        font-size: 0.875rem !important;
+    }
+    .realtime-section > div:nth-of-type(1) .w-8 {
+        width: 2.5rem !important;
+        height: 2.5rem !important;
+    }
+    /* 차트 컨테이너 */
+    .realtime-section > div:nth-of-type(2) > div {
+        height: 100% !important;
+    }
+    .realtime-section > div:nth-of-type(2) > div > div {
+        height: 100% !important;
+    }
+    /* 고래거래, 청산 컨테이너 - 높이 제한 */
+    .realtime-section > div:nth-of-type(3) > div {
+        height: 100% !important;
+        max-height: 100% !important;
+        min-height: 0 !important;
+    }
+    /* 대시보드 높이 제한 */
+    section[aria-label="커뮤니티 게시판 및 채팅"] {
+        max-height: 750px !important;
+        height: 750px !important;
+    }
+}
+
+/* 높이 1500px 이상에서 SEO 영역 보이도록 높이 제한 */
+@media (min-height: 1500px) {
+    section[aria-label="커뮤니티 게시판 및 채팅"] {
+        max-height: 900px !important;
+        height: 900px !important;
+    }
+    .chat-column {
+        max-width: 480px !important;
+    }
+    .board-news-column {
+        flex: 1 1 auto !important;
+        max-width: none !important;
+    }
+    .widget-column {
+        flex: 0 0 auto !important;
+    }
+}
+
+/* 높이 1800px 이상에서 조금 더 여유 */
+@media (min-height: 1800px) {
+    section[aria-label="커뮤니티 게시판 및 채팅"] {
+        max-height: 1000px !important;
+        height: 1000px !important;
+    }
+}
+
+
+/* 중간 구간 (1700px ~ 2000px) - 뉴스 우선 */
+@media (min-width: 1700px) and (max-width: 1999px) {
+    .board-news-column {
+        max-width: none !important;
+        flex: 0.5 1 auto !important;
+    }
+    .chat-column {
+        max-width: none !important;
+        min-width: 500px !important;
+        flex: 1.5 1 auto !important;
+    }
+    .widget-column {
+        min-width: 280px !important;
+        max-width: 320px !important;
+        flex: 0 0 auto !important;
+    }
+}
+
+/* 중간 구간 (2000px ~ 2560px) */
+@media (min-width: 2000px) and (max-width: 2559px) {
+    .board-news-column {
+        max-width: none !important;
+        flex: 1 1 auto !important;
+    }
+    .chat-column {
+        max-width: 550px !important;
+        flex: 0 0 auto !important;
+    }
+    .widget-column {
+        flex: 0 0 auto !important;
+    }
+}
+
+/* QHD (2560px) 이상에서 영역 확대 */
+@media (min-width: 2560px) {
+    .chat-column {
+        min-width: 480px !important;
+        max-width: none !important;
+        flex: 1 1 auto !important;
+    }
+    .widget-column {
+        min-width: 380px !important;
+        max-width: 500px !important;
+        gap: 16px !important;
+        flex: 0 0 420px !important;
+    }
+    .board-news-column {
+        max-width: 1800px !important;
+        flex: 2 1 auto !important;
+    }
+    /* QHD 갭 증가 */
+    section[aria-label="커뮤니티 게시판 및 채팅"] {
+        gap: 32px !important;
+    }
+    /* QHD 메인 영역 패딩 */
+    main.flex.flex-col {
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+    }
+}
+
+/* 3000px 이상에서 균형 조정 */
+@media (min-width: 3000px) {
+    .chat-column {
+        min-width: 550px !important;
+        flex: 1 1 auto !important;
+    }
+    .widget-column {
+        min-width: 420px !important;
+        flex: 0 0 480px !important;
+    }
+    .board-news-column {
+        max-width: 2000px !important;
+        flex: 2 1 auto !important;
+    }
+}
+
+/* 4K (3840px) 이상에서 최적화 */
+@media (min-width: 3840px) {
+    .chat-column {
+        min-width: 560px !important;
+        flex: 1 1 auto !important;
+    }
+    .widget-column {
+        min-width: 450px !important;
+        gap: 28px !important;
+        flex: 0 0 auto !important;
+    }
+    .board-news-column {
+        max-width: 2200px !important;
+        flex: 2 1 auto !important;
+    }
+    /* 4K 대시보드 높이 제한 - SEO 푸터 보이도록 */
+    section[aria-label="커뮤니티 게시판 및 채팅"] {
+        gap: 48px !important;
+        height: calc(100vh - 900px) !important;
+        min-height: 350px !important;
+    }
+    /* 4K 헤더 영역 2배 확대 */
+    .realtime-section {
+        min-height: 480px !important;
+        padding: 40px 48px !important;
+        gap: 40px !important;
+    }
+    /* 4K 헤더 내부 코인 가격 박스 확대 */
+    .realtime-section button {
+        min-height: 380px !important;
+        padding: 36px !important;
+        border-radius: 16px !important;
+    }
+    .realtime-section h2 {
+        font-size: 1.75rem !important;
+    }
+    .realtime-section p {
+        font-size: 3rem !important;
+        margin-top: 24px !important;
+    }
+    .realtime-section .text-xs,
+    .realtime-section .text-sm {
+        font-size: 1.5rem !important;
+        margin-top: 16px !important;
+    }
+    /* 4K 차트 높이 확대 */
+    .realtime-section .h-30,
+    .realtime-section .h-45 {
+        height: 380px !important;
+    }
+    /* 4K 롱숏 박스 높이 확대 */
+    .realtime-section .min-h-30,
+    .realtime-section .min-h-45 {
+        min-height: 380px !important;
+        padding: 28px !important;
+    }
+    /* 4K 롱숏 박스 내부 요소 확대 */
+    .realtime-section .min-h-30 .font-semibold,
+    .realtime-section .min-h-45 .font-semibold {
+        font-size: 1.5rem !important;
+    }
+    .realtime-section .min-h-30 .h-6,
+    .realtime-section .min-h-30 .h-8,
+    .realtime-section .min-h-45 .h-6,
+    .realtime-section .min-h-45 .h-8 {
+        height: 48px !important;
+    }
+    .realtime-section .min-h-30 .text-emerald-400,
+    .realtime-section .min-h-30 .text-red-400,
+    .realtime-section .min-h-45 .text-emerald-400,
+    .realtime-section .min-h-45 .text-red-400 {
+        font-size: 1.25rem !important;
+    }
+    /* 4K 헤더 내부 갭 확대 */
+    .realtime-section > div {
+        gap: 24px !important;
+    }
+    /* 4K 메인 영역 패딩 증가 */
+    main.flex.flex-col {
+        padding-left: 48px !important;
+        padding-right: 48px !important;
+    }
+    /* 4K SEO 푸터 확대 */
+    section[aria-labelledby="seo-footer-heading"] {
+        margin-top: 40px !important;
+        border-top-width: 2px !important;
+    }
+    section[aria-labelledby="seo-footer-heading"] > div {
+        max-width: 100% !important;
+        padding: 48px 60px !important;
+    }
+    section[aria-labelledby="seo-footer-heading"] img {
+        width: 120px !important;
+        height: 120px !important;
+    }
+    section[aria-labelledby="seo-footer-heading"] h2 {
+        font-size: 2rem !important;
+        line-height: 1.4 !important;
+    }
+    section[aria-labelledby="seo-footer-heading"] p {
+        font-size: 1.25rem !important;
+        line-height: 1.8 !important;
+    }
+    section[aria-labelledby="seo-footer-heading"] .grid {
+        gap: 32px !important;
+        margin-top: 48px !important;
+    }
+    section[aria-labelledby="seo-footer-heading"] article {
+        padding: 40px !important;
+        border-radius: 20px !important;
+    }
+    section[aria-labelledby="seo-footer-heading"] article h3 {
+        font-size: 1.25rem !important;
+    }
+    section[aria-labelledby="seo-footer-heading"] article p,
+    section[aria-labelledby="seo-footer-heading"] article li {
+        font-size: 1.1rem !important;
+    }
+}

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cd /home/c1ph3r/Downloads/TradeHub-0.0.7 && npm run desktop:start

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=TradeHub
+Comment=Trading Simulator
+Exec=trading_sim
+Icon=trading_sim
+Terminal=false
+Type=Application
+Categories=Utility;Productivity;
+StartupNotify=true
+StartupWMClass=com.todo.gtk

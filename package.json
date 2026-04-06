@@ -1,0 +1,39 @@
+{
+  "name": "trading-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint",
+    "desktop:dev": "concurrently -k \"npm run dev\" \"wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=http://127.0.0.1:3000 electron .\"",
+    "desktop:start": "cross-env NODE_ENV=production electron ."
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.58.0",
+    "framer-motion": "^12.23.22",
+    "jotai": "^2.17.0",
+    "lightweight-charts": "^5.0.8",
+    "next": "^15.5.9",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.0.0",
+    "electron": "^37.3.1",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.4",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "wait-on": "^8.0.5"
+  }
+}
