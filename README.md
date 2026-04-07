@@ -10,6 +10,10 @@ TradeHub is a comprehensive, real-time cryptocurrency trading dashboard and simu
 
 <img width="2528" height="1347" alt="image" src="https://github.com/user-attachments/assets/c3678281-65e0-4b35-9699-c4793ede1977" />
 
+## Preview
+
+https://github.com/user-attachments/assets/f1c1cb64-725d-46cd-9619-1e6b4ea25208
+
 ## ✨ Key Features
 
 ### 📊 Real-Time Market Data
