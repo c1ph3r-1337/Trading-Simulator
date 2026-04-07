@@ -53,7 +53,6 @@ TradeHub is a comprehensive, real-time cryptocurrency trading dashboard and simu
 - Area uses a `sqrt(volume)` log scale, color uses a red-green 24h change gradient
 - Squarified treemap layout with 30s polling
 
----
 
 ## 🚀 Getting Started
 
