@@ -4,6 +4,10 @@ TradeHub is a comprehensive, real-time cryptocurrency trading dashboard and simu
 
 ---
 
+## Dashboard
+
+<img width="1432" height="686" alt="Dashboard screenshot" src="https://github.com/user-attachments/assets/7954aa1d-5710-4d74-bb29-04c9ebc837d5" />
+
 ## ✨ Key Features
 
 ### 📊 Real-Time Market Data
@@ -38,6 +42,16 @@ TradeHub is a comprehensive, real-time cryptocurrency trading dashboard and simu
 *   **Backend:** [Supabase](https://supabase.com/) (Postgres, Realtime, Auth, Storage)
 *   **Data:** Binance WebSockets & REST APIs
 *   **Desktop:** [Electron](https://www.electronjs.org/)
+
+---
+
+## Tree Map
+
+<img width="1437" height="684" alt="Treemap screenshot" src="https://github.com/user-attachments/assets/4b82ac3b-05d2-4c58-84ec-1edbccef0a6b" />
+
+- Filters Binance 24hr tickers above $500K quote volume and shows the top 150 coins
+- Area uses a `sqrt(volume)` log scale, color uses a red-green 24h change gradient
+- Squarified treemap layout with 30s polling
 
 ---
 
