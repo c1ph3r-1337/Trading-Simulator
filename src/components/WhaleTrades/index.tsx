@@ -38,7 +38,12 @@ const WATCH_SYMBOLS = ["btcusdt", "ethusdt", "solusdt", "bnbusdt", "xrpusdt"];
 const MIN_USD_VALUE = 50000; // $50,000 이상만 표시
 const MAX_ITEMS = 15;
 
-export default function WhaleTrades({ fadeDelay = 0 }: { fadeDelay?: number }) {
+type WhaleProps = {
+    fadeDelay?: number;
+    className?: string;
+};
+
+export default function WhaleTrades({ fadeDelay = 0, className = "" }: WhaleProps) {
     const [trades, setTrades] = useState<WhaleTrade[]>([]);
     const [isConnected, setIsConnected] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -47,7 +52,9 @@ export default function WhaleTrades({ fadeDelay = 0 }: { fadeDelay?: number }) {
     const reconnectTimerRef = useRef<number | null>(null);
     const isTreemapOpen = useAtomValue(treemapOpenAtom);
 
-    useEffect(() => { setMounted(true); }, []);
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // REST로 최근 대형 거래 즉시 로드
     useEffect(() => {
@@ -185,72 +192,82 @@ export default function WhaleTrades({ fadeDelay = 0 }: { fadeDelay?: number }) {
 
     return (
         <div
-            className="relative flex-1 min-w-0 h-30 2xl:h-45 max-h-30 2xl:max-h-45"
+            className={`relative flex-1 min-w-0 h-30 2xl:h-45 max-h-30 2xl:max-h-45 ${className}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div className={`absolute inset-0 border border-neutral-800 rounded-lg shadow-sm p-2 2xl:p-4 bg-neutral-900 flex flex-col overflow-hidden transition-[opacity,transform] duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: `${fadeDelay}ms`, transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}>
-            {/* 헤더 */}
-            <div className="flex items-center justify-between mb-2 flex-shrink-0">
-                <div className="flex items-center gap-2">
-                    <span className="font-semibold text-sm 2xl:text-base text-neutral-100">
-                        Whale Trades
-                    </span>
-                    <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                            isConnected ? "bg-emerald-500" : "bg-red-500"
-                        }`}
-                        title={isConnected ? "Connected" : "Disconnected"}
-                    />
-                </div>
-                <span className="text-[10px] 2xl:text-xs text-neutral-500">
-                    $50K+
-                </span>
-            </div>
-
-            {/* 거래 리스트 */}
-            <div className="flex-1 overflow-hidden">
-                {trades.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full gap-2">
-                        <div className="flex items-center gap-1.5">
-                            <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? "bg-emerald-500 animate-pulse" : "bg-neutral-600 animate-pulse"}`} />
-                            <span className="text-[10px] 2xl:text-xs text-neutral-500">
-                                {isConnected ? "Waiting for trades" : "Connecting"}
-                            </span>
-                            <span className="text-[10px] text-neutral-600 animate-pulse">···</span>
-                        </div>
+            <div
+                className={`relative flex h-full flex-col overflow-hidden transition-[opacity,transform] duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                style={{
+                    transitionDelay: `${fadeDelay}ms`,
+                    transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+                }}
+            >
+                {/* 헤더 */}
+                <div className="flex items-center justify-between mb-2 flex-shrink-0">
+                    <div className="flex items-center gap-2">
+                        <span className="font-semibold text-sm 2xl:text-base text-neutral-100">
+                            Whale Trades
+                        </span>
+                        <span
+                            className={`w-1.5 h-1.5 rounded-full ${
+                                isConnected ? "bg-emerald-500" : "bg-red-500"
+                            }`}
+                            title={isConnected ? "Connected" : "Disconnected"}
+                        />
                     </div>
-                ) : (
-                    <div className="space-y-1 overflow-y-auto max-h-full scrollbar-thin">
-                        <AnimatePresence mode="popLayout">
-                            {trades.map((trade) => (
-                                <motion.div
-                                    key={trade.id}
-                                    initial={{ opacity: 0, x: -20, height: 0 }}
-                                    animate={{ opacity: 1, x: 0, height: "auto" }}
-                                    exit={{ opacity: 0, x: 20, height: 0 }}
-                                    transition={{ duration: 0.2 }}
-                                    className={`flex items-center justify-between py-1 px-1.5 rounded text-[11px] 2xl:text-xs ${
-                                        trade.side === "BUY"
-                                            ? "bg-emerald-500/10"
-                                            : "bg-red-500/10"
+                    <span className="text-[10px] 2xl:text-xs text-neutral-500">
+                        $50K+
+                    </span>
+                </div>
+
+                {/* 거래 리스트 */}
+                <div className="flex-1 overflow-hidden">
+                    {trades.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full gap-2">
+                            <div className="flex items-center gap-1.5">
+                                <span
+                                    className={`w-1.5 h-1.5 rounded-full ${
+                                        isConnected ? "bg-emerald-500 animate-pulse" : "bg-neutral-600 animate-pulse"
                                     }`}
-                                >
-                                    <div className="flex items-center gap-1.5">
-                                        <span
-                                            className={`text-[10px] ${
-                                                trade.side === "BUY"
-                                                    ? "text-emerald-400"
-                                                    : "text-red-400"
-                                            }`}
-                                        >
-                                            {trade.side === "BUY" ? "▲" : "▼"}
-                                        </span>
-                                        <span className="text-neutral-200 font-medium">
-                                            {trade.symbol}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
+                                />
+                                <span className="text-[10px] 2xl:text-xs text-neutral-500">
+                                    {isConnected ? "Waiting for trades" : "Connecting"}
+                                </span>
+                                <span className="text-[10px] text-neutral-600 animate-pulse">···</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="space-y-1 overflow-y-auto max-h-full scrollbar-thin">
+                            <AnimatePresence mode="popLayout">
+                                {trades.map((trade) => (
+                                    <motion.div
+                                        key={trade.id}
+                                        initial={{ opacity: 0, x: -20, height: 0 }}
+                                        animate={{ opacity: 1, x: 0, height: "auto" }}
+                                        exit={{ opacity: 0, x: 20, height: 0 }}
+                                        transition={{ duration: 0.2 }}
+                                        className={`flex items-center justify-between py-1 px-1.5 rounded text-[11px] 2xl:text-xs ${
+                                            trade.side === "BUY"
+                                                ? "bg-emerald-500/10"
+                                                : "bg-red-500/10"
+                                        }`}
+                                    >
+                                        <div className="flex items-center gap-1.5">
+                                            <span
+                                                className={`text-[10px] ${
+                                                    trade.side === "BUY"
+                                                        ? "text-emerald-400"
+                                                        : "text-red-400"
+                                                }`}
+                                            >
+                                                {trade.side === "BUY" ? "▲" : "▼"}
+                                            </span>
+                                            <span className="text-neutral-200 font-medium">
+                                                {trade.symbol}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
                                         <span
                                             className={`font-mono font-semibold ${
                                                 trade.side === "BUY"
@@ -280,7 +297,7 @@ export default function WhaleTrades({ fadeDelay = 0 }: { fadeDelay?: number }) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.18 }}
-                        className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+16px)] w-[235px] text-[11px] bg-neutral-900 border border-neutral-700 text-neutral-300 rounded-lg py-4 px-5 shadow-lg z-50 pointer-events-none"
+                        className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+16px)] w-[235px] text-[11px] bg-neutral-950 border border-neutral-700 text-neutral-200 rounded-lg py-4 px-5 shadow-2xl z-50 pointer-events-none backdrop-blur-xl"
                     >
                         <div className="font-semibold text-amber-300 mb-1">
                             About this feed

@@ -15,27 +15,50 @@ const CoinChart = dynamic(() => import("@/components/CoinChart"), {
 export const RealTimeSection = () => {
     return (
         <section
-            aria-label="실시간 코인 가격 및 차트"
-            className="realtime-section font-sans flex gap-3 2xl:gap-5 min-h-35 2xl:min-h-50 mt-4 mx-auto bg-neutral-950 items-center w-full min-w-[1320px] border border-zinc-800 rounded-2xl px-4 2xl:px-6"
+            aria-label="Real-time trading board"
+            className="realtime-section font-sans mt-5 w-full"
         >
-            {/* 코인 가격 박스들 - 비율 3 */}
-            <div className="flex gap-2 2xl:gap-3 flex-[3] min-w-0">
-                <CoinPriceBox boxId="tile-1" defaultSymbol="btcusdt" fadeDelay={0} />
-                <CoinPriceBox boxId="tile-2" defaultSymbol="ethusdt" fadeDelay={80} />
-                <CoinPriceBox boxId="tile-3" defaultSymbol="xrpusdt" fadeDelay={160} />
-                <CoinPriceBox boxId="tile-4" defaultSymbol="solusdt" fadeDelay={240} />
-            </div>
+            <div className="relative grid gap-3 xl:grid-cols-8">
+                {/* 4 Coins - 1 Column Each (Total 4/8) */}
+                {[["BTCUSDT", 0], ["ETHUSDT", 80], ["XRPUSDT", 160], ["SOLUSDT", 240]].map(
+                    ([sym, delay]) => (
+                        <div key={sym} className="xl:col-span-1 h-full min-h-[200px]">
+                            <CoinPriceBox
+                                boxId={`tile-${sym}`}
+                                defaultSymbol={sym.toString().toLowerCase()}
+                                fadeDelay={delay as number}
+                                className="h-full"
+                            />
+                        </div>
+                    ),
+                )}
 
-            {/* 차트 - 비율 2 */}
-            <div className="flex-[2] min-w-0">
-                <CoinChart fadeDelay={300} />
-            </div>
+                {/* Chart - 2 Columns (Total 2/8) */}
+                <div className="xl:col-span-2 h-full min-h-[200px] rounded-[22px] border border-white/5 bg-neutral-900/40 p-3 flex flex-col backdrop-blur-sm shadow-lg">
+                    <div className="mb-2 flex items-center justify-between px-1 flex-shrink-0">
+                        <div className="flex items-center gap-2 text-[9px] uppercase tracking-[0.2em] text-neutral-500 font-bold">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500/80 animate-pulse" />
+                            <span>Live Market Chart</span>
+                        </div>
+                    </div>
+                    <div className="flex-1 overflow-hidden rounded-[14px]">
+                        <CoinChart
+                            fadeDelay={300}
+                            showIndicators={false}
+                            hideIntervals={true}
+                            className="h-full"
+                        />
+                    </div>
+                </div>
+                {/* Whale Trades - 1 Column (Total 1/8) */}
+                <div className="xl:col-span-1 h-full min-h-[200px] rounded-[22px] border border-white/5 bg-neutral-900/40 p-3.5 backdrop-blur-sm shadow-lg">
+                    <WhaleTrades fadeDelay={380} className="h-full" />
+                </div>
 
-            {/* 고래 거래 + 청산 피드 - 비율 2 */}
-            <div className="flex gap-2 2xl:gap-4 flex-[2] min-w-0">
-                <WhaleTrades fadeDelay={380} />
-                <LiquidationFeed fadeDelay={460} />
-            </div>
+                {/* Liquidations - 1 Column (Total 1/8) */}
+                <div className="xl:col-span-1 h-full min-h-[200px] rounded-[22px] border border-white/5 bg-neutral-900/40 p-3.5 backdrop-blur-sm shadow-lg">
+                    <LiquidationFeed fadeDelay={460} className="h-full" />
+                </div>            </div>
         </section>
     );
 };

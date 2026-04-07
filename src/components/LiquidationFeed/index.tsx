@@ -33,7 +33,12 @@ type BinanceForceOrder = {
 const MIN_USD_VALUE = 5000; // $5,000 이상만 표시
 const MAX_ITEMS = 15;
 
-export default function LiquidationFeed({ fadeDelay = 0 }: { fadeDelay?: number }) {
+type LiquidationProps = {
+    fadeDelay?: number;
+    className?: string;
+};
+
+export default function LiquidationFeed({ fadeDelay = 0, className = "" }: LiquidationProps) {
     const [liquidations, setLiquidations] = useState<Liquidation[]>([]);
     const [isConnected, setIsConnected] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -141,11 +146,17 @@ export default function LiquidationFeed({ fadeDelay = 0 }: { fadeDelay?: number 
 
     return (
         <div
-            className="relative flex-1 min-w-0 h-30 2xl:h-45 max-h-30 2xl:max-h-45"
+            className={`relative flex-1 min-w-0 h-30 2xl:h-45 max-h-30 2xl:max-h-45 ${className}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div className={`absolute inset-0 border border-neutral-800 rounded-lg shadow-sm p-2 2xl:p-4 bg-neutral-900 flex flex-col overflow-hidden transition-[opacity,transform] duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: `${fadeDelay}ms`, transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}>
+            <div
+                className={`relative flex h-full flex-col overflow-hidden transition-[opacity,transform] duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                style={{
+                    transitionDelay: `${fadeDelay}ms`,
+                    transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+                }}
+            >
             {/* 헤더 */}
             <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
@@ -236,7 +247,7 @@ export default function LiquidationFeed({ fadeDelay = 0 }: { fadeDelay?: number 
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.18 }}
-                        className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+16px)] w-[235px] text-[11px] bg-neutral-900 border border-neutral-700 text-neutral-300 rounded-lg py-4 px-5 shadow-lg z-50 pointer-events-none"
+                        className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+16px)] w-[235px] text-[11px] bg-neutral-950 border border-neutral-700 text-neutral-200 rounded-lg py-4 px-5 shadow-2xl z-50 pointer-events-none backdrop-blur-xl"
                     >
                         <div className="font-semibold text-amber-300 mb-1">
                             About this feed

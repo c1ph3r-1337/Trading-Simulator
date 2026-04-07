@@ -20,12 +20,15 @@ export type MarketIndicesResponse = {
     updatedAt: string;
 };
 
-// Yahoo Finance 심볼 매핑
+// Yahoo Finance symbols aligned to the local India-focused market view
 const INDICES = [
-    { symbol: "^IXIC", name: "NASDAQ" },
-    { symbol: "^KS11", name: "KOSPI" },
-    { symbol: "GC=F", name: "GOLD" },
+    { symbol: "^NSEI", name: "NIFTY 50" },
+    { symbol: "^BSESN", name: "SENSEX" },
+    { symbol: "GC=F", name: "GOLD 10g" },
 ] as const;
+
+const TROY_OUNCE_TO_GRAMS = 31.1034768;
+const TEN_GRAMS_PER_TROY_OUNCE = 10 / TROY_OUNCE_TO_GRAMS;
 
 function withTimeout(url: string, ms = 5000, init?: RequestInit) {
     const ctrl = new AbortController();
@@ -89,6 +92,30 @@ async function fetchYahooQuote(symbol: string): Promise<{
     }
 }
 
+async function fetchUsdInrRate(): Promise<number | null> {
+    try {
+        const res = await withTimeout(
+            "https://api.frankfurter.dev/v2/rates?base=USD&quotes=INR",
+            5000,
+            {
+                headers: {
+                    "User-Agent":
+                        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
+                },
+                cache: "no-store",
+            }
+        );
+
+        if (!res.ok) return null;
+
+        const data = (await res.json()) as Array<{ rate?: number }>;
+        const rate = data[0]?.rate;
+        return typeof rate === "number" && Number.isFinite(rate) ? rate : null;
+    } catch {
+        return null;
+    }
+}
+
 // 메모리 캐시
 let lastGood: MarketIndicesResponse | null = null;
 let lastUpdated = 0;
@@ -105,14 +132,28 @@ export async function GET() {
             });
         }
 
+        const usdInrRate = await fetchUsdInrRate();
+
         const results = await Promise.all(
             INDICES.map(async ({ symbol, name }) => {
                 const quote = await fetchYahooQuote(symbol);
+                const isGold = symbol === "GC=F";
+                const fx = isGold ? usdInrRate : null;
+                const goldUnitFactor = isGold ? TEN_GRAMS_PER_TROY_OUNCE : 1;
+                const price =
+                    isGold && quote.price !== null && fx !== null
+                        ? quote.price * fx * goldUnitFactor
+                        : quote.price;
+                const change =
+                    isGold && quote.change !== null && fx !== null
+                        ? quote.change * fx * goldUnitFactor
+                        : quote.change;
+
                 return {
                     symbol,
                     name,
-                    price: quote.price,
-                    change: quote.change,
+                    price,
+                    change,
                     changePercent: quote.changePercent,
                     updatedAt: new Date().toISOString(),
                 } satisfies MarketIndex;

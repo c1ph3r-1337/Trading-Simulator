@@ -13,6 +13,7 @@ type Props = {
   period?: Period;
   source?: Source;
   pollMs?: number;      // 폴링 주기(ms) 기본 60초
+  className?: string;
 };
 
 type RatioRow = {
@@ -35,14 +36,14 @@ function isRatioRowArray(x: unknown): x is RatioRow[] {
     x.every((r) => r && typeof r === "object" && typeof (r as { timestamp?: unknown }).timestamp === "number");
 }
 
-// 툴팁 설명 (HTML 줄바꿈 포함)
+// Tooltip copy (HTML line breaks preserved)
 const DESCRIPTION_MAP: Record<Source, string> = {
   global:
-    "바이낸스 모든 계정의 롱/숏 비율<br/>시장 전체의 포지션 성향을 파악할 때 사용합니다.",
+    "Long/short ratio across all Binance accounts<br/>Useful for reading overall market positioning.",
   "top-trader":
-    "바이낸스 상위 10% 트레이더 롱/숏 비율<br/>숙련된 트레이더들의 방향성을 참고합니다.",
+    "Long/short ratio for Binance top traders<br/>Useful for tracking the bias of higher-skill traders.",
   taker:
-    "테이커(시장가) 매수/매도 비율<br/>즉각적인 공격적 주문 흐름을 반영합니다.",
+    "Taker buy/sell ratio at market price<br/>Reflects aggressive order flow in real time.",
 };
 
 export default function LongShortRatioBox({
@@ -50,6 +51,7 @@ export default function LongShortRatioBox({
   period = "5m",
   source = "global",
   pollMs = 60_000,
+  className = "",
 }: Props) {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
@@ -121,34 +123,85 @@ export default function LongShortRatioBox({
   }, [symbol, period, source, pollMs, isTreemapOpen]);
 
   const description = DESCRIPTION_MAP[source];
+  const sourceLabel =
+    source === "global" ? "Global" : source === "top-trader" ? "Top Trader" : "Taker";
+  const dominantLong = (longPct ?? 0) >= (shortPct ?? 0);
+  const tilt = longPct == null || shortPct == null
+    ? "Balanced"
+    : Math.abs(longPct - shortPct) < 2
+      ? "Balanced"
+      : dominantLong
+        ? "Long Bias"
+        : "Short Bias";
+  const accentClass =
+    tilt === "Balanced"
+      ? "text-amber-300 border-amber-500/20 bg-amber-500/10"
+      : dominantLong
+        ? "text-emerald-300 border-emerald-500/20 bg-emerald-500/10"
+        : "text-red-300 border-red-500/20 bg-red-500/10";
+  const labelCopy =
+    source === "global"
+      ? "All-account positioning snapshot"
+      : source === "top-trader"
+        ? "Top account positioning snapshot"
+        : "Aggressive taker flow snapshot";
 
   return (
     <div
-      className="relative flex-1 min-w-0 min-h-30 2xl:min-h-45 border border-neutral-800 rounded-lg shadow-sm p-2 2xl:p-4 cursor-default bg-neutral-900 flex flex-col justify-center"
+      className={`relative flex h-full min-w-0 flex-col rounded-[28px] border border-neutral-800 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.10),transparent_34%),linear-gradient(180deg,#171717_0%,#101010_100%)] p-5 2xl:p-6 shadow-[0_18px_60px_rgba(0,0,0,0.28)] cursor-default text-white ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 헤더 */}
-      <div className="flex items-center justify-between mb-1 2xl:mb-2">
-        <div className="font-semibold text-sm 2xl:text-base text-neutral-100">{symbol}</div>
-        <div className="text-[11px] 2xl:text-xs text-neutral-300">
-          {source === "global" && "Global"}
-          {source === "top-trader" && "Top Trader"}
-          {source === "taker" && "Taker"}
-          {" · "}
-          {period}
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <div className="text-[10px] uppercase tracking-[0.24em] text-neutral-500">
+            Positioning
+          </div>
+          <div className="mt-2 font-semibold text-xl 2xl:text-2xl text-neutral-100">
+            {symbol}
+          </div>
+          <p className="mt-2 max-w-[22rem] text-sm leading-6 text-neutral-400">
+            {labelCopy}
+          </p>
+        </div>
+        <div className="rounded-full border border-white/6 bg-white/6 px-2.5 py-1 text-[10px] 2xl:text-xs font-semibold text-neutral-300 whitespace-nowrap">
+          {sourceLabel} · {period}
         </div>
       </div>
 
-      {/* 바디 */}
       {loading ? (
-        <div className="h-[72px] 2xl:h-[90px] rounded-md bg-neutral-800 animate-pulse" />
+        <div className="mt-6 h-40 rounded-[24px] bg-neutral-800 animate-pulse" />
       ) : err ? (
-        <div className="text-sm text-amber-500">⚠ {err}</div>
+        <div className="mt-6 rounded-2xl border border-amber-500/20 bg-amber-500/8 p-4 text-sm text-amber-400">⚠ {err}</div>
       ) : (
         <>
-          <div className="mt-1 2xl:mt-2">
-            <div className="h-6 2xl:h-8 w-full bg-neutral-800 rounded-full overflow-hidden relative">
+          <div className="mt-7 flex items-start justify-between gap-4">
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">
+                Bias Signal
+              </div>
+              <div className="mt-3 flex items-center gap-3">
+                <span className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${accentClass}`}>
+                  {tilt}
+                </span>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">
+                Snapshot
+              </div>
+              <div className="mt-2 text-sm font-medium text-neutral-200 whitespace-nowrap">
+                {ts ? new Date(ts).toLocaleString("en-IN") : "—"}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-[24px] border border-white/6 bg-white/[0.03] p-5">
+            <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.22em] text-neutral-500">
+              <span>Position Split</span>
+              <span>{sourceLabel}</span>
+            </div>
+            <div className="mt-4 relative h-12 w-full overflow-hidden rounded-full border border-white/5 bg-neutral-800/70">
               <div className="absolute inset-0 bg-red-500/80" />
               <motion.div
                 className="absolute left-0 top-0 bottom-0 bg-emerald-500"
@@ -157,18 +210,52 @@ export default function LongShortRatioBox({
                 transition={{ duration: 0.5, ease: "easeOut" }}
               />
             </div>
-            <div className="flex justify-between text-[12px] 2xl:text-sm mt-1 2xl:mt-2">
-              <span className="text-emerald-400 font-medium">
-                Long {longPct?.toFixed(2)}%
-              </span>
-              <span className="text-red-400 font-medium">
-                Short {shortPct?.toFixed(2)}%
-              </span>
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <div className="rounded-[20px] border border-emerald-500/15 bg-emerald-500/8 p-4">
+                <div className="text-[10px] uppercase tracking-[0.22em] text-emerald-400/75">
+                  Long
+                </div>
+                <div className="mt-2 text-2xl font-semibold text-emerald-300 tabular-nums">
+                  {longPct?.toFixed(2)}%
+                </div>
+                <div className="mt-1 text-xs text-zinc-400">Bullish positioning share</div>
+              </div>
+              <div className="rounded-[20px] border border-red-500/15 bg-red-500/8 p-4">
+                <div className="text-[10px] uppercase tracking-[0.22em] text-red-400/75">
+                  Short
+                </div>
+                <div className="mt-2 text-2xl font-semibold text-red-300 tabular-nums">
+                  {shortPct?.toFixed(2)}%
+                </div>
+                <div className="mt-1 text-xs text-zinc-400">Bearish positioning share</div>
+              </div>
             </div>
           </div>
 
-          <div className="mt-1 2xl:mt-2 text-[11px] 2xl:text-xs text-neutral-400">
-            {ts ? new Date(ts).toLocaleString("en-US") : ""}
+          <div className="mt-auto grid gap-3 pt-5 xl:grid-cols-[1fr_auto]">
+            <div className="rounded-[20px] border border-white/6 bg-black/20 px-4 py-3">
+              <div className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">
+                Reading
+              </div>
+              <div className="mt-2 text-sm text-neutral-300">
+                {tilt === "Balanced"
+                  ? "Long and short positioning is close to even, so conviction is muted."
+                  : dominantLong
+                    ? "Longs are leading the book, showing stronger bullish positioning."
+                    : "Shorts are leading the book, showing stronger bearish positioning."}
+              </div>
+            </div>
+            <div className="rounded-[20px] border border-white/6 bg-white/[0.03] px-4 py-3 text-right">
+              <div className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">
+                Spread
+              </div>
+              <div className={`mt-2 text-xl font-semibold tabular-nums ${dominantLong ? "text-emerald-300" : "text-red-300"}`}>
+                {longPct != null && shortPct != null
+                  ? `${Math.abs(longPct - shortPct).toFixed(2)}%`
+                  : "—"}
+              </div>
+              <div className="mt-1 text-xs text-neutral-500">Gap between both sides</div>
+            </div>
           </div>
         </>
       )}
@@ -184,7 +271,7 @@ export default function LongShortRatioBox({
             className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+16px)] w-[220px] 2xl:w-[260px] text-[11px] 2xl:text-xs bg-neutral-900 border border-neutral-700 text-neutral-300 rounded-lg py-3 px-4 2xl:py-4 2xl:px-5 shadow-lg z-50 pointer-events-none"
           >
             <div className="font-semibold text-amber-300 mb-1 2xl:mb-2">
-              Indicator Info ({source === "top-trader" ? "Top Trader" : source === "global" ? "Global" : "Taker"})
+              Indicator Info ({sourceLabel})
             </div>
             <p
               className="leading-snug"

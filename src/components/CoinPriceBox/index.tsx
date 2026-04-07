@@ -12,7 +12,7 @@ function getCoinLogoUrl(symbol: string): string {
     return `https://assets.coincap.io/assets/icons/${base}@2x.png`;
 }
 
-type Props = { boxId: string; defaultSymbol?: string; fadeDelay?: number };
+type Props = { boxId: string; defaultSymbol?: string; fadeDelay?: number; className?: string };
 
 // Binance ExchangeInfo 타입
 interface BinanceExchangeInfo {
@@ -98,7 +98,7 @@ async function fetchPrecision(sym: string): Promise<number> {
     return pendingRequests[key];
 }
 
-export const CoinPriceBox = ({ boxId, defaultSymbol = "btcusdt", fadeDelay = 0 }: Props) => {
+export const CoinPriceBox = ({ boxId, defaultSymbol = "btcusdt", fadeDelay = 0, className = "" }: Props) => {
     const initialSymbol = defaultSymbol.toLowerCase();
 
     const [symbol, setSymbol] = useState(initialSymbol);
@@ -284,35 +284,40 @@ export const CoinPriceBox = ({ boxId, defaultSymbol = "btcusdt", fadeDelay = 0 }
     return (
         <>
             <div
-                className="relative w-full"
+                className={`relative w-full ${className}`}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
                 <button
                     onClick={() => setOpen(true)}
-                    className="flex-1 min-w-0 w-full min-h-26 2xl:min-h-40 cursor-pointer rounded-lg border border-neutral-800 bg-neutral-900 p-2 2xl:p-4 shadow-md transition hover:border-neutral-700 flex flex-col items-center justify-center overflow-hidden"
+                    className="flex-1 min-w-0 w-full h-full min-h-[180px] cursor-pointer rounded-[22px] border border-white/5 bg-neutral-900/40 p-3 shadow-lg transition hover:border-white/10 hover:bg-neutral-800/40 flex flex-col items-center justify-center overflow-hidden backdrop-blur-sm"
                 >
-                    <div className={`flex flex-col items-center gap-1 2xl:gap-2 transition-[opacity,transform] duration-700 ${price != null ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: `${fadeDelay}ms`, transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}>
-                        <div className="relative w-8 h-8 2xl:w-10 2xl:h-10 flex-shrink-0">
+                    <div className={`flex flex-col items-center gap-1.5 transition-[opacity,transform] duration-700 ${price != null ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`} style={{ transitionDelay: `${fadeDelay}ms`, transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}>
+                        <div className="relative w-9 h-9 2xl:w-11 2xl:h-11 flex-shrink-0 mb-0.5">
                             <Image
                                 src={getCoinLogoUrl(symbol)}
                                 alt={symbol}
                                 fill
-                                className="object-contain rounded-full"
+                                className="object-contain rounded-full shadow-lg"
                                 unoptimized
                                 onError={(e) => {
                                     e.currentTarget.style.display = 'none';
                                 }}
                             />
                         </div>
-                        <h2 className="text-sm 2xl:text-base font-bold text-white">
+                        <h2 className="text-[10px] 2xl:text-xs font-bold text-neutral-400 tracking-wider">
                             {symbol.toUpperCase()}
                         </h2>
-                        <p className={`text-lg 2xl:text-2xl font-mono tabular-nums transition-colors duration-150 rounded px-1 ${pctColor} ${priceFlash === "up" ? "bg-emerald-500/20" : priceFlash === "down" ? "bg-red-500/20" : ""}`}>
+                        <p className={`text-base 2xl:text-lg font-mono font-bold tabular-nums transition-colors duration-150 ${pctColor}`}>
                             {getDisplayPrice()}
                         </p>
-                        <div className={`text-xs 2xl:text-sm font-semibold ${pctColor}`}>
-                            {pct != null ? `${arrow} ${pctText}` : "—"}
+                        <div className={`text-[9px] 2xl:text-[10px] font-bold tracking-tight ${pctColor} flex items-center gap-1`}>
+                            {pct != null ? (
+                                <>
+                                    <span>{arrow}</span>
+                                    <span>{pctText}</span>
+                                </>
+                            ) : "—"}
                         </div>
                     </div>
                 </button>
@@ -324,9 +329,9 @@ export const CoinPriceBox = ({ boxId, defaultSymbol = "btcusdt", fadeDelay = 0 }
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 6 }}
                             transition={{ duration: 0.18 }}
-                            className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+16px)] z-50 w-[200px] rounded-lg bg-neutral-900 border border-neutral-700 py-2 px-3 text-[11px] text-neutral-200 shadow-lg pointer-events-none"
+                            className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+16px)] z-50 w-[200px] rounded-lg bg-neutral-950 border border-neutral-700 py-2 px-3 text-[11px] text-neutral-200 shadow-2xl pointer-events-none text-center backdrop-blur-xl"
                         >
-                            클릭 시 코인 심볼을 변경할 수 있습니다.
+                            Click to change coin symbol.
                             {/* 테두리가 있는 삼각형 화살표 */}
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[9px] w-0 h-0 border-l-[5px] border-r-[5px] border-b-[9px] border-transparent border-b-neutral-700" />
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[7px] w-0 h-0 border-l-4 border-r-4 border-b-[8px] border-transparent border-b-neutral-900" />

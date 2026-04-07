@@ -32,7 +32,6 @@ export default function SimPositions({ positions, onClose, onUpdateTpSl }: Props
 
     return (
         <div className="bg-neutral-950 rounded-2xl border border-zinc-800 overflow-hidden">
-            {/* 헤더 */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-800">
                 <h3 className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider">
                     Positions
@@ -42,19 +41,7 @@ export default function SimPositions({ positions, onClose, onUpdateTpSl }: Props
                 </h3>
             </div>
 
-            {/* 테이블 헤더 */}
-            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_auto] gap-2 px-5 py-2 text-[10px] text-neutral-500 border-b border-zinc-800/40">
-                <div>Symbol</div>
-                <div className="text-right">Size</div>
-                <div className="text-right">Entry</div>
-                <div className="text-right">Mark</div>
-                <div className="text-right">Liq.</div>
-                <div className="text-right">Unrealized PnL</div>
-                <div className="text-right w-[52px]"></div>
-            </div>
-
-            {/* 포지션 리스트 */}
-            <div className="divide-y divide-zinc-800/30">
+            <div className="space-y-3 p-4">
                 {positions.map((pos) => {
                     const cp = prices[pos.symbol] ?? pos.entry_price;
                     const pnl = pos.unrealized_pnl;
@@ -67,11 +54,12 @@ export default function SimPositions({ positions, onClose, onUpdateTpSl }: Props
                         : 0;
 
                     return (
-                        <div key={pos.id} className="group">
-                            {/* 메인 행 */}
-                            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_auto] gap-2 items-center px-5 py-3 hover:bg-white/[0.015] transition-colors">
-                                {/* 심볼 + 방향 */}
-                                <div className="flex items-center gap-2">
+                        <div
+                            key={pos.id}
+                            className="group rounded-2xl border border-zinc-800/70 bg-white/[0.02] p-4"
+                        >
+                            <div className="flex flex-wrap items-start justify-between gap-3">
+                                <div className="flex items-center gap-3">
                                     <div className={`w-1 h-8 rounded-full ${isLong ? "bg-emerald-500" : "bg-red-500"}`} />
                                     <div>
                                         <div className="flex items-center gap-1.5">
@@ -98,53 +86,7 @@ export default function SimPositions({ positions, onClose, onUpdateTpSl }: Props
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* 규모 */}
-                                <div className="text-right">
-                                    <div className="text-[12px] text-neutral-200 font-mono tabular-nums">
-                                        ${notional.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                                    </div>
-                                    <div className="text-[10px] text-neutral-500 font-mono tabular-nums">
-                                        {pos.margin.toFixed(2)} margin
-                                    </div>
-                                </div>
-
-                                {/* 진입가 */}
-                                <div className="text-right">
-                                    <div className="text-[12px] text-neutral-300 font-mono tabular-nums">
-                                        {pos.entry_price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                                    </div>
-                                </div>
-
-                                {/* 현재가 */}
-                                <div className="text-right">
-                                    <div className={`text-[12px] font-mono tabular-nums font-medium ${isProfit ? "text-emerald-400" : "text-red-400"}`}>
-                                        {cp.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                                    </div>
-                                </div>
-
-                                {/* 청산가 */}
-                                <div className="text-right">
-                                    <div className="text-[12px] text-orange-400 font-mono tabular-nums">
-                                        {pos.liq_price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                                    </div>
-                                    <div className={`text-[10px] font-mono tabular-nums ${liqDist < 5 ? "text-orange-400" : "text-neutral-500"}`}>
-                                        {liqDist.toFixed(1)}% away
-                                    </div>
-                                </div>
-
-                                {/* PnL */}
-                                <div className="text-right">
-                                    <div className={`text-[14px] font-bold font-mono tabular-nums ${isProfit ? "text-emerald-400" : "text-red-400"}`}>
-                                        {isProfit ? "+" : ""}{pnl.toFixed(2)}
-                                    </div>
-                                    <div className={`text-[11px] font-mono tabular-nums ${isProfit ? "text-emerald-500" : "text-red-500"}`}>
-                                        {isProfit ? "+" : ""}{roe.toFixed(2)}%
-                                    </div>
-                                </div>
-
-                                {/* 청산 버튼 */}
-                                <div className="text-right w-[52px]">
+                                <div className="ml-auto">
                                     <button
                                         onClick={() => onClose(pos.id, cp)}
                                         className="text-[10px] px-3 py-1.5 bg-neutral-800 hover:bg-red-500/20 text-neutral-400 hover:text-red-400 rounded-lg border border-neutral-700/50 transition-all cursor-pointer"
@@ -154,10 +96,55 @@ export default function SimPositions({ positions, onClose, onUpdateTpSl }: Props
                                 </div>
                             </div>
 
-                            {/* TP/SL 바 */}
-                            <div className="px-5 pb-2.5">
+                            <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                                <div className="rounded-xl border border-zinc-800/70 bg-black/20 px-3 py-2.5">
+                                    <div className="text-[10px] uppercase tracking-[0.18em] text-neutral-500">Notional</div>
+                                    <div className="mt-1 text-[13px] text-neutral-200 font-mono tabular-nums">
+                                        ${notional.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                                    </div>
+                                    <div className="mt-1 text-[10px] text-neutral-500 font-mono tabular-nums">
+                                        {pos.margin.toFixed(2)} margin
+                                    </div>
+                                </div>
+
+                                <div className="rounded-xl border border-zinc-800/70 bg-black/20 px-3 py-2.5">
+                                    <div className="text-[10px] uppercase tracking-[0.18em] text-neutral-500">Entry / Mark</div>
+                                    <div className="mt-1 text-[13px] text-neutral-300 font-mono tabular-nums">
+                                        {pos.entry_price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                                    </div>
+                                    <div className={`mt-1 text-[12px] font-mono tabular-nums font-medium ${isProfit ? "text-emerald-400" : "text-red-400"}`}>
+                                        {cp.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                                    </div>
+                                </div>
+
+                                <div className="rounded-xl border border-zinc-800/70 bg-black/20 px-3 py-2.5">
+                                    <div className="text-[10px] uppercase tracking-[0.18em] text-neutral-500">Liquidation</div>
+                                    <div className="mt-1 text-[13px] text-orange-400 font-mono tabular-nums">
+                                        {pos.liq_price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                                    </div>
+                                    <div className={`mt-1 text-[10px] font-mono tabular-nums ${liqDist < 5 ? "text-orange-400" : "text-neutral-500"}`}>
+                                        {liqDist.toFixed(1)}% away
+                                    </div>
+                                </div>
+
+                                <div className="rounded-xl border border-zinc-800/70 bg-black/20 px-3 py-2.5 sm:col-span-2 xl:col-span-3">
+                                    <div className="flex items-center justify-between gap-3">
+                                        <div>
+                                            <div className="text-[10px] uppercase tracking-[0.18em] text-neutral-500">Unrealized PnL</div>
+                                            <div className={`mt-1 text-[15px] font-bold font-mono tabular-nums ${isProfit ? "text-emerald-400" : "text-red-400"}`}>
+                                                {isProfit ? "+" : ""}{pnl.toFixed(2)}
+                                            </div>
+                                        </div>
+                                        <div className={`text-[12px] font-mono tabular-nums ${isProfit ? "text-emerald-500" : "text-red-500"}`}>
+                                            {isProfit ? "+" : ""}{roe.toFixed(2)}%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mt-4">
                                 {editingId === pos.id ? (
-                                    <div className="flex items-center gap-2 bg-neutral-900/50 rounded-lg px-3 py-2">
+                                    <div className="flex flex-wrap items-center gap-2 bg-neutral-900/50 rounded-lg px-3 py-2">
                                         <div className="flex items-center gap-1.5 flex-1">
                                             <span className="text-[10px] text-emerald-400 font-medium shrink-0">TP</span>
                                             <input
@@ -205,7 +192,7 @@ export default function SimPositions({ positions, onClose, onUpdateTpSl }: Props
                                         )}
                                     </div>
                                 ) : (
-                                    <div className="flex items-center gap-4 text-[11px]">
+                                    <div className="flex flex-wrap items-center gap-4 text-[11px]">
                                         <div className="flex items-center gap-1.5">
                                             <span className="text-neutral-500">TP</span>
                                             {pos.tp_price ? (

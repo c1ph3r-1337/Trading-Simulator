@@ -16,9 +16,22 @@ async function fetchIndices(signal?: AbortSignal): Promise<MarketIndicesResponse
 }
 
 function formatCompact(price: number, symbol: string): string {
-    if (symbol === "GC=F") return price.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    if (symbol === "^KS11") return price.toLocaleString("ko-KR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    return price.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (symbol === "GC=F") {
+        return price.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+    }
+
+    return price.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+}
+
+function currencyLabel(symbol: string): string {
+    if (symbol === "GC=F") return "INR / 10g";
+    return "INR";
 }
 
 function IndexItem({ index }: { index: MarketIndex }) {
@@ -34,9 +47,14 @@ function IndexItem({ index }: { index: MarketIndex }) {
             <span className="text-[10px] 2xl:text-xs text-neutral-300 font-medium mb-1">
                 {index.name}
             </span>
-            <span className="text-sm 2xl:text-base text-white font-mono font-semibold">
-                {index.price !== null ? formatCompact(index.price, index.symbol) : "—"}
-            </span>
+            <div className="flex items-baseline gap-1">
+                <span className="text-sm 2xl:text-base text-white font-mono font-semibold">
+                    {index.price !== null ? formatCompact(index.price, index.symbol) : "—"}
+                </span>
+                <span className="text-[10px] 2xl:text-xs text-neutral-500 font-semibold">
+                    {currencyLabel(index.symbol)}
+                </span>
+            </div>
             <span className={`text-[11px] 2xl:text-xs font-mono font-medium mt-0.5 ${color}`}>
                 {index.changePercent !== null ? (
                     `${isPositive ? "+" : ""}${index.changePercent.toFixed(2)}%`

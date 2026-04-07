@@ -144,7 +144,7 @@ export default function Home() {
             </Script>
 
             <PageSlider>
-                <main className="flex flex-col px-5 bg-black min-w-310">
+                <main className="home-shell flex min-w-310 flex-col px-5">
                     <RealTimeSection />
                     <DashBoard />
                 </main>
